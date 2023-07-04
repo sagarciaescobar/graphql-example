@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.1'
 	id 'io.spring.dependency-management' version '1.1.0'
+	id 'com.netflix.dgs.codegen' version '5.10.0'
 }
 
 group = 'com.grahql'
@@ -21,13 +22,21 @@ repositories {
 	mavenCentral()
 }
 
+dependencyManagement {
+	imports {
+		mavenBom 'com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:6.0.5'
+	}
+}
+
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
+	implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:6.0.5'
+	implementation 'com.netflix.graphql.dgs:graphql-dgs-extended-scalars:6.0.5'
+	implementation 'net.datafaker:datafaker:1.8.1'
 }
 
 tasks.named('test') {
