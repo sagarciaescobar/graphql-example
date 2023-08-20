@@ -2,10 +2,14 @@ scalar Url
 scalar Date
 scalar NonNegativeInt
 
+union SmartSearchResult = Hello | Book
+
 type Query {
     allHellos: [Hello]
     oneHello: Hello
     books(author: String): [Book]
     booksByRelease(releasedInput: ReleaseHistoryInput): [Book]
     mobileApps(mobileAppFilter: MobileAppFilter): [MobileApp]
+    pets(petFilter: PetFilter): [Pet]
+    smartSearch(keyword: String): [SmartSearchResult]
 }
