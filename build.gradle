@@ -37,6 +37,7 @@ dependencies {
 	implementation 'org.apache.commons:commons-lang3'
 	implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter'
 	implementation 'com.netflix.graphql.dgs:graphql-dgs-extended-scalars'
+	implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure'
 	implementation 'net.datafaker:datafaker:1.8.1'
 }
 
@@ -47,5 +48,9 @@ tasks.named('test') {
 generateJava {
 	packageName = "com.graphql.example"
 	generateClient = true
-	typeMapping= [ "Date":"java.time.LocalDate", "NonNegativeInt": "java.lang.Integer", "Url": "java.net.URL"]
+	typeMapping= [
+			"Date":"java.time.LocalDate",
+			"NonNegativeInt": "java.lang.Integer",
+			"Url": "java.net.URL",
+			"DateTime": "java.time.OffsetDateTime"]
 }

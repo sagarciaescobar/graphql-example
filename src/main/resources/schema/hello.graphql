@@ -2,3 +2,8 @@ type Hello {
     text: String
     randomInt: Int
 }
+
+input HelloInput {
+    text: String!
+    number: Int
+}
