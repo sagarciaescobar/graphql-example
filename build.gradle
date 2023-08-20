@@ -47,4 +47,5 @@ tasks.named('test') {
 generateJava {
 	packageName = "com.graphql.example"
 	generateClient = true
+	typeMapping= [ "Date":"java.time.LocalDate", "NonNegativeInt": "java.lang.Integer", "Url": "java.net.URL"]
 }
