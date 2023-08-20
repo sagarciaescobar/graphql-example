@@ -29,13 +29,14 @@ dependencyManagement {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:6.0.5'
-	implementation 'com.netflix.graphql.dgs:graphql-dgs-extended-scalars:6.0.5'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.apache.commons:commons-lang3'
+	implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter'
+	implementation 'com.netflix.graphql.dgs:graphql-dgs-extended-scalars'
 	implementation 'net.datafaker:datafaker:1.8.1'
 }
 

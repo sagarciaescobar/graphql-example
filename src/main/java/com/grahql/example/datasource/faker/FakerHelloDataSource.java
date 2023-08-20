@@ -1,6 +1,6 @@
 package com.grahql.example.datasource.faker;
 
-import com.netflix.dgs.codegen.generated.types.Hello;
+import com.graphql.example.types.Hello;
 import jakarta.annotation.PostConstruct;
 import net.datafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;

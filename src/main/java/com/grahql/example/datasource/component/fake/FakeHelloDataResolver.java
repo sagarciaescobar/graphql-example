@@ -1,7 +1,7 @@
 package com.grahql.example.datasource.component.fake;
 
 import com.grahql.example.datasource.faker.FakerHelloDataSource;
-import com.netflix.dgs.codegen.generated.types.Hello;
+import com.graphql.example.types.Hello;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsQuery;
 

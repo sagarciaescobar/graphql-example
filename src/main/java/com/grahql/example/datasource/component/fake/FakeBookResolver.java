@@ -1,10 +1,11 @@
 package com.grahql.example.datasource.component.fake;
 
 import com.grahql.example.datasource.faker.FakerBookData;
-import com.netflix.dgs.codegen.generated.DgsConstants;
-import com.netflix.dgs.codegen.generated.types.Book;
-import com.netflix.dgs.codegen.generated.types.ReleaseHistory;
-import com.netflix.dgs.codegen.generated.types.ReleaseHistoryInput;
+
+import com.graphql.example.DgsConstants;
+import com.graphql.example.types.Book;
+import com.graphql.example.types.ReleaseHistory;
+import com.graphql.example.types.ReleaseHistoryInput;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsData;
 import com.netflix.graphql.dgs.InputArgument;
