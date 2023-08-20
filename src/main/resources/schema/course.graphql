@@ -14,6 +14,11 @@ type Query {
     pets(petFilter: PetFilter): [Pet]
     smartSearch(keyword: String): [SmartSearchResult]
     additionalOnRequestHeader: String
+
+    me: User!
+    problemLatestList: [Problem!]
+    itemSearch(filter: SearchableItemFilter): [SearchableItem]
+    problemById(id: ID!): Problem!
 }
 
 type Mutation {
