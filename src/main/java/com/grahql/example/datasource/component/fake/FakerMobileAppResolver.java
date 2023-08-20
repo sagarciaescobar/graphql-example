@@ -10,6 +10,7 @@ import com.netflix.graphql.dgs.InputArgument;
 import org.apache.commons.lang3.StringUtils;
 
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class FakerMobileAppResolver {
             field = DgsConstants.QUERY.MobileApps
     )
     public List<MobileApp> getApps(@InputArgument(name = "mobileAppFilter") Optional<MobileAppFilter> filter) {
+        System.out.println(filter);
         return filter.map(mobileAppFilter -> FakerMobileAppDataSource.MOBILE_APP_LIST.stream().filter(
                 mobileApp -> this.matchFilter(mobileAppFilter, mobileApp)
         ).collect(Collectors.toList())).orElse(FakerMobileAppDataSource.MOBILE_APP_LIST);
@@ -29,23 +31,29 @@ public class FakerMobileAppResolver {
     }
 
     private boolean matchFilter(MobileAppFilter mobileAppFilter, MobileApp mobileApp) {
-        boolean isAppMatch = StringUtils.containsIgnoreCase(mobileApp.getName(),
-                StringUtils.defaultIfBlank(mobileAppFilter.getName(), StringUtils.EMPTY))
-                && StringUtils.containsIgnoreCase(mobileApp.getVersion(),
-                StringUtils.defaultIfBlank(mobileAppFilter.getVersion(), StringUtils.EMPTY)
-                );
+        boolean isAppMatch = StringUtils.containsIgnoreCase(mobileApp.getName(), mobileAppFilter.getName())
+                && StringUtils.containsIgnoreCase(mobileApp.getVersion(), mobileAppFilter.getVersion())
+                && mobileApp.getReleaseDate().isAfter(Optional.ofNullable(mobileAppFilter.getReleasedBefore()).orElse(LocalDate.MIN))
+                && mobileApp.getDownloaded() >= Optional.of(mobileAppFilter.getMinimunDownloaded()).orElse(0);
+
         if (isAppMatch) {
             return false;
         }
 
         if (StringUtils.isNoneBlank(mobileAppFilter.getPlatform())
                 && !mobileApp.getPlatform().contains(mobileAppFilter.getPlatform().toLowerCase())) {
+            System.out.println(mobileApp.getPlatform());
+            System.out.println(mobileAppFilter.getPlatform());
             return false;
         }
 
-        if (mobileApp.getAuthor() != null
+        if (mobileAppFilter.getAuthor() != null
                 && !StringUtils.containsIgnoreCase(mobileApp.getAuthor().getName(),
-                StringUtils.defaultIfBlank(mobileAppFilter.getAuthor().getName(), StringUtils.EMPTY))){
+                mobileAppFilter.getAuthor().getName())){
+            return false;
+        }
+
+        if (mobileAppFilter.getCategory() != null && !mobileApp.getCategory().equals(mobileAppFilter.getCategory())) {
             return false;
         }
 
