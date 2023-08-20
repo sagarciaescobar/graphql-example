@@ -25,6 +25,13 @@ type Mutation {
     addHello(helloInput: HelloInput!): Int
     replaceHelloText(helloInput: HelloInput!): [Hello]
     deleteHello(number: Int!): Int
+
+    userCreate(user: UserCreateInput!): UserResponse!
+    userLogin(user: UserLoginInput!): UserResponse!
+    userActivation(user: UserActivationInput!): UserActivationResponse!
+    problemCreate(problem: ProblemCreateInput!): ProblemResponse!
+    solutionCreation(solution: SolutionCreateInput!): SolutionResponse!
+    solutionVoteCreation(vote: SolutionVoteInput!): SolutionResponse!
 }
 
 type Subscription {

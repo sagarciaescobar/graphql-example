@@ -48,3 +48,60 @@ interface SearchableItem {
 input SearchableItemFilter {
     keyword: String
 }
+
+input UserCreateInput {
+    username: String!
+    email: String!
+    password: String!
+    displayName: String
+    avatar: Url
+}
+
+input UserLoginInput {
+    username: String!
+    password: String!
+}
+
+input UserActivationInput {
+    username: ID!
+    active: Boolean!
+}
+
+input ProblemCreateInput {
+    title: String!
+    content: String!
+    tags: [String!]!
+}
+
+input SolutionCreateInput {
+    content: String!
+    category: SolutionCategory!
+    problemId: ID!
+}
+
+input SolutionVoteInput {
+    solutionId: ID!
+    voteAsGood: Boolean!
+}
+
+type UserAuthToken {
+    authToken: String!
+    expiryTime: DateTime
+}
+
+type UserResponse {
+    user: User
+    authToken: UserAuthToken
+}
+
+type ProblemResponse {
+    problem: Problem
+}
+
+type SolutionResponse {
+    solution: Solution
+}
+
+type UserActivationResponse {
+    isActive: Boolean!
+}
