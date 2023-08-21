@@ -3,3 +3,11 @@ dgs:
     schema-locations:
       - classpath*:schema/**/*.graphql
       - classpath*:schema/**/*.gql
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=problemz
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false

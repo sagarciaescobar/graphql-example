@@ -30,15 +30,21 @@ dependencyManagement {
 
 dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.apache.commons:commons-lang3'
+
 	implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter'
 	implementation 'com.netflix.graphql.dgs:graphql-dgs-extended-scalars'
 	implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure'
+
 	implementation 'net.datafaker:datafaker:1.8.1'
+	implementation 'org.apache.commons:commons-lang3'
+
+	runtimeOnly 'org.postgresql:postgresql'
 }
 
 tasks.named('test') {
