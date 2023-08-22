@@ -3,6 +3,9 @@ dgs:
     schema-locations:
       - classpath*:schema/**/*.graphql
       - classpath*:schema/**/*.gql
+
+
+spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres?currentSchema=problemz
     username: postgres

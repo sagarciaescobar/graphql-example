@@ -1,9 +1,7 @@
 package com.grahql.example.datasource.problemz.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -12,7 +10,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "solutionz")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Solutionz {
@@ -23,15 +22,16 @@ public class Solutionz {
     @CreationTimestamp
     private LocalDateTime creationTimestamp;
 
-    private String title;
     private String content;
-    private String tags;
-
-    @OneToMany(mappedBy = "problemz")
-    @OrderBy("creationTimestamp desc")
-    private List<Solutionz> solutions;
+    private String category;
+    private int voteGoodCount;
+    private int voteBadCount;
 
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)
     private Userz createdBy;
+
+    @ManyToOne
+    @JoinColumn(name = "problemz_id", nullable = false)
+    private Problemz problemz;
 }
