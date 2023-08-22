@@ -1,6 +1,7 @@
 package com.grahql.example.component.problemz;
 
 import com.grahql.example.exception.ProblemzAuthenticationException;
+import com.grahql.example.service.command.ProblemzCommandService;
 import com.grahql.example.service.query.ProblemzQueryService;
 import com.grahql.example.service.query.UserzQueryService;
 import com.grahql.example.util.GraphqlBeanMapper;
