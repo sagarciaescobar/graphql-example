@@ -1,68 +1,87 @@
 package com.grahql.example.component.problemz;
 
-import com.grahql.example.exception.ProblemzAuthenticationException;
-import com.grahql.example.service.command.ProblemzCommandService;
-import com.grahql.example.service.query.ProblemzQueryService;
+import com.grahql.example.datasource.problemz.entity.Userz;
+import com.grahql.example.datasource.problemz.entity.UserzToken;
+import com.grahql.example.exception.ProblemzPermissionException;
+import com.grahql.example.service.command.UserzCommandService;
 import com.grahql.example.service.query.UserzQueryService;
 import com.grahql.example.util.GraphqlBeanMapper;
 import com.graphql.example.DgsConstants;
-import com.graphql.example.types.Problem;
-import com.graphql.example.types.ProblemCreateInput;
-import com.graphql.example.types.ProblemResponse;
+import com.graphql.example.types.*;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsData;
 import com.netflix.graphql.dgs.InputArgument;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestHeader;
 import com.netflix.graphql.dgs.exceptions.DgsEntityNotFoundException;
-import reactor.core.publisher.Flux;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @DgsComponent
 public class UserDataResolver {
 
     @Autowired
-    private ProblemzQueryService queryService;
-
-    @Autowired
-    private ProblemzCommandService commandService;
+    private UserzCommandService userzCommandService;
 
     @Autowired
     private UserzQueryService userzQueryService;
 
-    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = DgsConstants.QUERY.ProblemLatestList)
-    public List<Problem> getProblemLatestList() {
-        return queryService.problemzLatestList().stream().map(GraphqlBeanMapper::mapToGraphql)
-                .collect(Collectors.toList());
-    }
-
-    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = DgsConstants.QUERY.ProblemDetail)
-    public Problem getProblemDetail(@InputArgument(name = "id") String problemId) {
-        var problemzId = UUID.fromString(problemId);
-        var problemz = queryService.problemzDetail(problemzId)
+    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = DgsConstants.QUERY.Me)
+    public User accountInfo(@RequestHeader(name = "authToken", required = true) String authToken) {
+        Userz userz = userzQueryService.findUserzByAuthToken(authToken)
                 .orElseThrow(DgsEntityNotFoundException::new);
 
-        return GraphqlBeanMapper.mapToGraphql(problemz);
+        return GraphqlBeanMapper.mapToGraphql(userz);
     }
 
-    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.ProblemCreate)
-    public ProblemResponse createProblem(
-            @RequestHeader(name = "authToken", required = true) String authToken,
-            @InputArgument(name = "problem") ProblemCreateInput problemCreateInput) {
-        var userz = userzQueryService.findUserzByAuthToken(authToken)
-                .orElseThrow(ProblemzAuthenticationException::new);
-        var problemz = GraphqlBeanMapper.mapToEntity(problemCreateInput, userz);
-        var created = commandService.createProblemz(problemz);
+    @Secured("ROLE_ADMIN")
+    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.UserCreate)
+    public UserResponse createUser(@InputArgument(name = "user") UserCreateInput userCreateInput) {
+//        var userAuth = userzQueryService.findUserzByAuthToken(authToken)
+//                .orElseThrow(ProblemzAuthenticationException::new);
+//
+//        if (!StringUtils.equals(userAuth.getUserRole(), "ROLE_ADMIN")) {
+//            throw new ProblemzPermissionException();
+//        }
 
-        return ProblemResponse.newBuilder().problem(GraphqlBeanMapper.mapToGraphql(created)).build();
+        Userz userz = GraphqlBeanMapper.mapToEntity(userCreateInput);
+        Userz saved = userzCommandService.createUserz(userz);
+        UserResponse userResponse = UserResponse.newBuilder().user(
+                GraphqlBeanMapper.mapToGraphql(saved)).build();
+
+        return userResponse;
     }
 
-    @DgsData(parentType = DgsConstants.SUBSCRIPTION_TYPE, field = DgsConstants.SUBSCRIPTION.ProblemAdded)
-    public Flux<Problem> subscribeProblemAdded() {
-        return commandService.problemzFlux().map(GraphqlBeanMapper::mapToGraphql);
+    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.UserLogin)
+    public UserResponse userLogin(@InputArgument(name = "user") UserLoginInput userLoginInput) {
+        UserzToken generatedToken = userzCommandService.login(userLoginInput.getUsername(),
+                userLoginInput.getPassword());
+        UserAuthToken userAuthToken = GraphqlBeanMapper.mapToGraphql(generatedToken);
+        User userInfo = accountInfo(userAuthToken.getAuthToken());
+        UserResponse userResponse = UserResponse.newBuilder().authToken(userAuthToken)
+                .user(userInfo).build();
+
+        return userResponse;
+    }
+
+    @Secured("ROLE_ADMIN")
+    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.UserActivation)
+    public UserActivationResponse userActivation(
+            @InputArgument(name = "user") UserActivationInput userActivationInput) {
+//        var userAuth = userzQueryService.findUserzByAuthToken(authToken)
+//                .orElseThrow(ProblemzAuthenticationException::new);
+//
+//        if (!StringUtils.equals(userAuth.getUserRole(), "ROLE_ADMIN")) {
+//            throw new ProblemzPermissionException();
+//        }
+
+        var updated = userzCommandService.activateUser(
+                userActivationInput.getUsername(), userActivationInput.getActive()
+        ).orElseThrow(DgsEntityNotFoundException::new);
+        var userActivationResponse = UserActivationResponse.newBuilder()
+                .isActive(updated.isActive()).build();
+
+        return userActivationResponse;
     }
 
 }
