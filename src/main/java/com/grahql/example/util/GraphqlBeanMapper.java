@@ -1,4 +1,4 @@
-package com.grahql.example.datasource.util;
+package com.grahql.example.util;
 
 import com.grahql.example.datasource.problemz.entity.Problemz;
 import com.grahql.example.datasource.problemz.entity.Solutionz;
@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -42,7 +43,7 @@ public class GraphqlBeanMapper {
         OffsetDateTime createDateTime = original.getCreationTimestamp().atOffset(ZONE_OFFSET);
         User author = mapToGraphql(original.getCreatedBy());
         List<Solution> convertedSolutions = original.getSolutions().stream()
-//                .sorted(Comparator.comparing(Solutionz::getCreationTimestamp).reversed())
+                .sorted(Comparator.comparing(Solutionz::getCreationTimestamp).reversed())
                 .map(GraphqlBeanMapper::mapToGraphql)
                 .collect(Collectors.toList());
         List<String> tagList = List.of(original.getTags().split(","));

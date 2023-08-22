@@ -1,4 +1,4 @@
-package com.grahql.example.datasource.component.fake;
+package com.grahql.example.component.fake;
 
 import com.grahql.example.datasource.faker.FakerBookData;
 import com.grahql.example.datasource.faker.FakerHelloDataSource;

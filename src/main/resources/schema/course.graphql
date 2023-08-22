@@ -18,7 +18,7 @@ type Query {
     me: User!
     problemLatestList: [Problem!]
     itemSearch(filter: SearchableItemFilter): [SearchableItem]
-    problemById(id: ID!): Problem!
+    problemDetail(id: ID!): Problem!
 }
 
 type Mutation {

@@ -1,4 +1,4 @@
-package com.grahql.example.datasource.util;
+package com.grahql.example.util;
 
 import org.bouncycastle.crypto.generators.OpenBSDBCrypt;
 
