@@ -2,7 +2,6 @@ package com.grahql.example.component.problemz;
 
 import com.grahql.example.datasource.problemz.entity.Userz;
 import com.grahql.example.datasource.problemz.entity.UserzToken;
-import com.grahql.example.exception.ProblemzPermissionException;
 import com.grahql.example.service.command.UserzCommandService;
 import com.grahql.example.service.query.UserzQueryService;
 import com.grahql.example.util.GraphqlBeanMapper;
@@ -11,11 +10,12 @@ import com.graphql.example.types.*;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsData;
 import com.netflix.graphql.dgs.InputArgument;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestHeader;
 import com.netflix.graphql.dgs.exceptions.DgsEntityNotFoundException;
+
+import java.util.Optional;
 
 @DgsComponent
 public class UserDataResolver {
@@ -75,10 +75,10 @@ public class UserDataResolver {
 //            throw new ProblemzPermissionException();
 //        }
 
-        var updated = userzCommandService.activateUser(
+        Userz updated = userzCommandService.activateUser(
                 userActivationInput.getUsername(), userActivationInput.getActive()
         ).orElseThrow(DgsEntityNotFoundException::new);
-        var userActivationResponse = UserActivationResponse.newBuilder()
+        UserActivationResponse userActivationResponse = UserActivationResponse.newBuilder()
                 .isActive(updated.isActive()).build();
 
         return userActivationResponse;

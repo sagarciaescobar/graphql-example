@@ -22,6 +22,7 @@ public class Userz {
     private String email;
     private String hashedPassword;
     private URL avatar;
+    private String userRole;
 
     @CreationTimestamp
     private LocalDateTime creationTimestamp;
