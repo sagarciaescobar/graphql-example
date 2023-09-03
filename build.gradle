@@ -22,12 +22,6 @@ repositories {
 	mavenCentral()
 }
 
-dependencyManagement {
-	imports {
-		mavenBom 'com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:6.0.5'
-	}
-}
-
 dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
@@ -38,6 +32,7 @@ dependencies {
 	implementation 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	implementation(platform('com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:6.0.0'))
 	implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter'
 	implementation 'com.netflix.graphql.dgs:graphql-dgs-extended-scalars'
 	implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure'
